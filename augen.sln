@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "augen", "augen\augen.csproj", "{E056BDD0-7F7D-4AF7-841D-324608A47C88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "augen.console", "augen.console\augen.console.csproj", "{C1C39BDE-5C57-479E-A4EB-96133545C134}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "augen.http", "augen.http\augen.http.csproj", "{0CBCA210-AE0E-4A78-910C-D0E4A7C2706B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E056BDD0-7F7D-4AF7-841D-324608A47C88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E056BDD0-7F7D-4AF7-841D-324608A47C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E056BDD0-7F7D-4AF7-841D-324608A47C88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E056BDD0-7F7D-4AF7-841D-324608A47C88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1C39BDE-5C57-479E-A4EB-96133545C134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1C39BDE-5C57-479E-A4EB-96133545C134}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1C39BDE-5C57-479E-A4EB-96133545C134}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1C39BDE-5C57-479E-A4EB-96133545C134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CBCA210-AE0E-4A78-910C-D0E4A7C2706B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CBCA210-AE0E-4A78-910C-D0E4A7C2706B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CBCA210-AE0E-4A78-910C-D0E4A7C2706B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CBCA210-AE0E-4A78-910C-D0E4A7C2706B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
