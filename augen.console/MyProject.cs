@@ -6,19 +6,19 @@ namespace augen.console
 	public class MyProject : Project
 	{
 		public MyProject() : base("some project",
-								  new Servers { { "173.194.67.102", port => 80 } })
+		    new Servers { { "173.194.67.102", port => 80, basePath => "/calendar" } })
 		{
 			this.Http(123456)
-				.Get(path => "/")
-				.Header("host", "google.com")
+                .Header("host", "google.com")
+				.Get(basePath => basePath + "/")
 				.Test("status code", response => response.StatusCode == HttpStatusCode.OK)
 				.Test("contents", response => response.ContentLength > 100);
 
-			this.Http(12345)
-				.Get("/")
-				.Header("host", "google.com")
-				.Test("status code", response => response.StatusCode == HttpStatusCode.OK)
-				.Test("contents", response => response.ContentLength > 100);
+            //this.Http(12345)
+            //    .Header("host", "google.com")
+            //    .Get("/")
+            //    .Test("status code", response => response.StatusCode == HttpStatusCode.OK)
+            //    .Test("contents", response => response.ContentLength > 100);
 		}
 	}
 }

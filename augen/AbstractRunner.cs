@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -9,26 +8,28 @@ namespace augen
 	{
 		public void Run(Project project)
 		{
-			project.AcceptRunner(this);
+            foreach (var serverSet in project.Servers)
+            foreach (var serverName in serverSet.Names)
+            foreach (var connection in project.Connections)
+            {
+                foreach (var request in connection.Requests)
+                {
+                    var conn = connection.OpenInternal(serverName, expr => GetOption(expr, serverSet.Options, request.Options));
+
+
+                    //var response = request.Execute()
+                }
+
+                //connection.CloseInternal(conn);
+            }
 		}
 
-		internal void RunImpl(string projectName, IEnumerable<ServerSet> servers, TestDescriptor[] tests)
+		private static dynamic GetOption(Expression<Func<string, object>> accessor, ILookup<string, object> serverOptions, Tuple<string[], Delegate>[] requestOptions)
 		{
-			foreach (var serverSet in servers)
-			foreach (var serverName in serverSet.Names)
-			{
-				var set = serverSet;
-				ExecuteTests(serverName, expr => CreateOptions(expr, set.Options), tests);
-			}
+			var accessorData = ExpressionUtils.ParseOption(accessor);
+            var parsedRequestOptions = 
+
+			return serverOptions[accessorData.Item1].FirstOrDefault() ?? accessorData.Item2;
 		}
-
-		private static dynamic CreateOptions(Expression<Func<string, object>> expr, ILookup<string, object> options)
-		{
-			var nameAndValue = ExpressionUtils.GetNameAndValue(expr);
-
-			return options[nameAndValue.Item1].FirstOrDefault() ?? nameAndValue.Item2;
-		}
-
-		protected abstract void ExecuteTests(string serverName, Options options, IEnumerable<TestDescriptor> tests);
 	}
 }

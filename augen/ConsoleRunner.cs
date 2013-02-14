@@ -5,14 +5,14 @@ namespace augen
 {
 	public class ConsoleRunner : AbstractRunner
 	{
-		protected override void ExecuteTests(string serverName, Options options, IEnumerable<TestDescriptor> tests)
-		{
-			Console.WriteLine("[{0}]", serverName);
+        //protected override void ExecuteTests(string serverName, Options optionsAccessor, IEnumerable<Test> tests)
+        //{
+        //    Console.WriteLine("[{0}]", serverName);
 
-			foreach (var test in tests)
-				Console.WriteLine("{0} -> {1}", test.Description, test.Checker.Compile()(test.Execute(serverName, options)));
+        //    foreach (var test in tests)
+        //        Console.WriteLine("{0} -> {1}", test.Description, test.Checker.Compile()(test.Execute(serverName, optionsAccessor)));
 
-			Console.WriteLine();
-		}
+        //    Console.WriteLine();
+        //}
 	}
 }

@@ -4,24 +4,20 @@ namespace augen
 {
     public abstract class Project
     {
-	    private readonly string _name;
-	    private readonly Servers _servers;
-	    private readonly List<TestDescriptor> _tests = new List<TestDescriptor>();
+        public string Name { get; private set; }
+        public Servers Servers { get; private set; }
+        public List<Connection> Connections { get; private set; }
 
-	    protected Project(string name, Servers servers)
-	    {
-		    _name = name;
-		    _servers = servers;
-	    }
+        protected Project(string name, Servers servers)
+        {
+            Name = name;
+            Servers = servers;
+            Connections = new List<Connection>();
+        }
 
-	    internal void Add(TestDescriptor testDescriptor)
-	    {
-		    _tests.Add(testDescriptor);
-	    }
-
-	    internal void AcceptRunner(AbstractRunner runner)
-	    {
-		    runner.RunImpl(_name, _servers, _tests.ToArray());
-	    }
+        internal void Add(Connection connection)
+        {
+            Connections.Add(connection);
+        }
     }
 }
