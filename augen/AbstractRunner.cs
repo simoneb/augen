@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 
 namespace augen
 {
@@ -9,27 +12,69 @@ namespace augen
 		public void Run(Project project)
 		{
             foreach (var serverSet in project.Servers)
-            foreach (var serverName in serverSet.Names)
-            foreach (var connection in project.Connections)
-            {
-                foreach (var request in connection.Requests)
-                {
-                    var conn = connection.OpenInternal(serverName, expr => GetOption(expr, serverSet.Options, request.Options));
+	        foreach (var serverName in serverSet.Names)
+	        {
+				ServerBegin(serverName);
 
+		        foreach (var connection in project.Connections)
+		        {
+			        object conn = null;
 
-                    //var response = request.Execute()
-                }
+			        foreach (var request in connection.Requests)
+			        {
+				        Options options = expr => GetOption(expr, serverSet.Options, request.Options);
 
-                //connection.CloseInternal(conn);
-            }
+				        conn = conn ?? connection.OpenInternal(serverName, options);
+
+				        var response = request.ExecuteInternal(conn, options);
+
+				        foreach (var test in request.Tests)
+				        {
+					        ReportTest(test.Description, test.Checker.Compile()(response));
+				        }
+
+				        request.CloseInternal(response);
+			        }
+
+			        if (conn != null)
+				        connection.CloseInternal(conn);
+		        }
+
+		        ServerEnd(serverName);
+	        }
 		}
 
-		private static dynamic GetOption(Expression<Func<string, object>> accessor, ILookup<string, object> serverOptions, Tuple<string[], Delegate>[] requestOptions)
+		protected abstract void ServerEnd(string serverName);
+
+		protected abstract void ServerBegin(string serverName);
+
+		protected abstract void ReportTest(string description, object outcome);
+
+		private static dynamic GetOption(Expression<Func<string, object>> accessor, ILookup<string, object> serverOptions, IReadOnlyDictionary<string, object> requestOptions)
 		{
 			var accessorData = ExpressionUtils.ParseOption(accessor);
-            var parsedRequestOptions = 
 
-			return serverOptions[accessorData.Item1].FirstOrDefault() ?? accessorData.Item2;
+			object requestOption;
+		
+			return serverOptions[accessorData.Item1].LastOrDefault() ??
+				(requestOptions.TryGetValue(accessorData.Item1, out requestOption)
+				       ? requestOption
+				       :  accessorData.Item2);
+		}
+	}
+
+	internal class DynamicLastLookup : DynamicObject
+	{
+		private readonly ILookup<string, object> _lookup;
+
+		public DynamicLastLookup(ILookup<string, object> lookup)
+		{
+			_lookup = lookup;
+		}
+
+		public override bool TryGetMember(GetMemberBinder binder, out object result)
+		{
+			return (result = _lookup[binder.Name].LastOrDefault()) != null;
 		}
 	}
 }

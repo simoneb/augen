@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Net;
 
 namespace augen.http
@@ -22,11 +21,6 @@ namespace augen.http
         }
 
 		public Get Get(string path)
-		{
-			return new Get(this, path);
-		}
-
-		public Get Get(Expression<Func<object, string>> path)
 		{
 			return new Get(this, path);
 		}

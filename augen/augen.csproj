@@ -43,7 +43,6 @@
     <Compile Include="ConsoleRunner.cs" />
     <Compile Include="ExpressionUtils.cs" />
     <Compile Include="Connection.cs" />
-    <Compile Include="Ext.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Servers.cs" />

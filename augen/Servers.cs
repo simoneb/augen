@@ -8,11 +8,11 @@ namespace augen
 {
 	public class Servers : IEnumerable<ServerSet>
 	{
-		private readonly Collection<ServerSet> servers = new Collection<ServerSet>();
+		private readonly Collection<ServerSet> _servers = new Collection<ServerSet>();
 
 		public void Add(string name, params Expression<Func<string, object>>[] options)
 		{
-			servers.Add(new ServerSet(ParseName(name), ExpressionUtils.ParseOptions(options)));
+			_servers.Add(new ServerSet(ParseName(name), ExpressionUtils.ParseOptions(options)));
 		}
 
 	    private static string[] ParseName(string name)
@@ -22,7 +22,7 @@ namespace augen
 
 		public IEnumerator<ServerSet> GetEnumerator()
 		{
-			return servers.GetEnumerator();
+			return _servers.GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

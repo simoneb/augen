@@ -1,24 +1,24 @@
 ﻿using System;
-using System.Linq.Expressions;
 using System.Net;
 
 namespace augen.http
 {
 	public class Get : Request<HttpWebRequest, HttpWebResponse>
 	{
-		public Get(Connection connection, string pathArg) : this(connection, path => pathArg)
+		public Get(Connection connection, string path) : base(connection, Tuple.Create("path", (object)path))
 		{
 		}
 
-		public Get(Connection connection, Expression<Func<object, string>> path) : base(connection, path)
+		protected override HttpWebResponse Execute(HttpWebRequest request, Options options)
 		{
+			request.Method = "GET";
+
+			return (HttpWebResponse) request.GetResponse();
 		}
 
-		protected override HttpWebResponse Execute(Options options)
+		protected override void Close(HttpWebResponse response)
 		{
-		    var response = (HttpWebResponse) null;// http.GetResponse();
-            //response.Close();
-			return response;
+			response.Close();
 		}
 	}
 }

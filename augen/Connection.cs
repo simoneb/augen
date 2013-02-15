@@ -23,12 +23,12 @@ namespace augen
         internal abstract object OpenInternal(string serverName, Options options);
     }
 
-    public abstract class Connection<TRequest> : Connection
+    public abstract class Connection<TConnection> : Connection
 	{
         protected Connection(Project project) : base(project) { }
 
-        protected abstract TRequest Open(string serverName, Options options);
-        protected abstract void Close(TRequest connection);
+        protected abstract TConnection Open(string serverName, Options options);
+        protected abstract void Close(TConnection connection);
 
         internal override object OpenInternal(string serverName, Options options)
         {
@@ -37,7 +37,7 @@ namespace augen
 
         internal override void CloseInternal(object connection)
         {
-            Close((TRequest)connection);
+            Close((TConnection)connection);
         }
 	}
 }
