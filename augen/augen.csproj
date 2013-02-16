@@ -49,6 +49,7 @@
     <Compile Include="OptionsHolder.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RequestExtensions.cs" />
     <Compile Include="Servers.cs" />
     <Compile Include="ServerSet.cs" />
     <Compile Include="Request.cs" />
