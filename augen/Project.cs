@@ -4,7 +4,7 @@ namespace augen
 {
     public abstract class Project
     {
-        public string Name { get; private set; }
+	    public string Name { get; private set; }
         public Servers Servers { get; private set; }
         public List<Connection> Connections { get; private set; }
 
@@ -19,5 +19,15 @@ namespace augen
         {
             Connections.Add(connection);
         }
+
+		protected Http.Http Http(int port)
+		{
+			return new Http.Http(this, port);
+		}
+
+		protected Tcp.Tcp Tcp(int port, bool connectThrows = false)
+		{
+			return new Tcp.Tcp(this, port, connectThrows);
+		}
     }
 }

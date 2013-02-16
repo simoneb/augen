@@ -34,22 +34,14 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyProject.cs" />
+    <Compile Include="DemoProject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\augen.http\augen.http.csproj">
-      <Project>{0CBCA210-AE0E-4A78-910C-D0E4A7C2706B}</Project>
-      <Name>augen.http</Name>
-    </ProjectReference>
     <ProjectReference Include="..\augen\augen.csproj">
       <Project>{E056BDD0-7F7D-4AF7-841D-324608A47C88}</Project>
       <Name>augen</Name>

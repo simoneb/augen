@@ -4,7 +4,7 @@
 	{
 		static void Main()
 		{
-			new ConsoleRunner().Run(new MyProject());
+			new ConsoleRunner().Run(new DemoProject());
 		}
 	}
 }

@@ -5,10 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "augen", "augen\augen.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "augen.console", "augen.console\augen.console.csproj", "{C1C39BDE-5C57-479E-A4EB-96133545C134}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "augen.http", "augen.http\augen.http.csproj", "{0CBCA210-AE0E-4A78-910C-D0E4A7C2706B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "augen.tests", "augen.tests\augen.tests.csproj", "{351153BC-4598-429E-B152-78F08110B417}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{FCF9A848-D71D-4CC5-8D66-055351AB5A52}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -30,14 +26,6 @@ Global
 		{C1C39BDE-5C57-479E-A4EB-96133545C134}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1C39BDE-5C57-479E-A4EB-96133545C134}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1C39BDE-5C57-479E-A4EB-96133545C134}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0CBCA210-AE0E-4A78-910C-D0E4A7C2706B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0CBCA210-AE0E-4A78-910C-D0E4A7C2706B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0CBCA210-AE0E-4A78-910C-D0E4A7C2706B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0CBCA210-AE0E-4A78-910C-D0E4A7C2706B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{351153BC-4598-429E-B152-78F08110B417}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{351153BC-4598-429E-B152-78F08110B417}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{351153BC-4598-429E-B152-78F08110B417}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{351153BC-4598-429E-B152-78F08110B417}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

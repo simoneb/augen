@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Net;
-
-namespace augen
+﻿namespace augen
 {
 	public abstract class AbstractRunner
 	{
@@ -17,28 +10,29 @@ namespace augen
 				ServerBegin(serverName);
 
 		        foreach (var connection in project.Connections)
-		        {
-			        object conn = null;
+			    {
+					var connectionOptionsMultiple = new OptionsMultipleLookup(serverSet, connection);
+					var connectionOptionsSingle = new OptionsSingleLookup(serverSet, connection);
 
-			        foreach (var request in connection.Requests)
-			        {
-				        Options options = expr => GetOption(expr, serverSet.Options, request.Options);
+					if (!connection.IsSatisfiedByFilters(connectionOptionsMultiple))
+						continue;
 
-				        conn = conn ?? connection.OpenInternal(serverName, options);
+					var connectionInstance = connection.OpenInternal(serverName, connectionOptionsSingle);
 
-				        var response = request.ExecuteInternal(conn, options);
+				    foreach (var request in connection.Requests)
+				    {
+					    var options = new OptionsSingleLookup(serverSet, connection, request);
 
-				        foreach (var test in request.Tests)
-				        {
-					        ReportTest(test.Description, test.Checker.Compile()(response));
-				        }
+					    var response = request.ExecuteInternal(connectionInstance, options);
 
-				        request.CloseInternal(response);
-			        }
+					    foreach (var test in request.Tests)
+						    ReportTest(test.Description, test.Checker.Compile()(response));
 
-			        if (conn != null)
-				        connection.CloseInternal(conn);
-		        }
+					    request.CloseInternal(response);
+				    }
+
+					connection.CloseInternal(connectionInstance);
+			    }
 
 		        ServerEnd(serverName);
 	        }
@@ -49,32 +43,5 @@ namespace augen
 		protected abstract void ServerBegin(string serverName);
 
 		protected abstract void ReportTest(string description, object outcome);
-
-		private static dynamic GetOption(Expression<Func<string, object>> accessor, ILookup<string, object> serverOptions, IReadOnlyDictionary<string, object> requestOptions)
-		{
-			var accessorData = ExpressionUtils.ParseOption(accessor);
-
-			object requestOption;
-		
-			return serverOptions[accessorData.Item1].LastOrDefault() ??
-				(requestOptions.TryGetValue(accessorData.Item1, out requestOption)
-				       ? requestOption
-				       :  accessorData.Item2);
-		}
-	}
-
-	internal class DynamicLastLookup : DynamicObject
-	{
-		private readonly ILookup<string, object> _lookup;
-
-		public DynamicLastLookup(ILookup<string, object> lookup)
-		{
-			_lookup = lookup;
-		}
-
-		public override bool TryGetMember(GetMemberBinder binder, out object result)
-		{
-			return (result = _lookup[binder.Name].LastOrDefault()) != null;
-		}
 	}
 }

@@ -1,47 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Linq;
 
 namespace augen
 {
-	public delegate dynamic Options(Expression<Func<string, dynamic>> expr);
-
-    public abstract class Request<TRequest, TResponse> : Request<TResponse>
+	public abstract class Request : OptionsHolder
 	{
-        protected Request(Connection connection, params Tuple<string, object>[] options) : base(connection, options)
-        {
-        }
+		internal List<Test> Tests { get; private set; }
 
-        public Request<TRequest, TResponse> Test(string description, Expression<Func<TResponse, object>> checker)
+		protected Request(Connection connection, params Expression<Func<string, object>>[] options) : base(options)
 		{
-			Add(new Test(description, Convert(checker)));
-            return this;
+			Tests = new List<Test>();
+			connection.Add(this);
 		}
 
-        private static Expression<Func<object, object>> Convert(Expression<Func<TResponse, object>> input)
+		internal void Add(Test test)
 		{
-			var parameter = Expression.Parameter(typeof(object));
-			return Expression.Lambda<Func<object, object>>(Expression.Invoke(input, Expression.Convert(parameter, typeof(TResponse))), parameter);
+			Tests.Add(test);
 		}
 
-	    internal override TResponse ExecuteInternal2(object connection, Options options)
-		{
-			return Execute((TRequest) connection, options);
-		}
+		internal abstract object ExecuteInternal(object connection, object options);
 
-	    protected abstract TResponse Execute(TRequest request, Options options);
+		internal abstract void CloseInternal(object response);
 	}
 
-    public abstract class Request<TResponse> : Request
+	public abstract class Request<TResponse> : Request
 	{
-	    protected Request(Connection connection, IEnumerable<Tuple<string, object>> options) : base(connection, options)
+	    protected Request(Connection connection, params Expression<Func<string, object>>[] options) : base(connection, options)
 	    {
 	    }
 
-	    internal abstract TResponse ExecuteInternal2(object connection, Options options);
+	    internal abstract TResponse ExecuteInternal2(object connection, object options);
 
-	    internal override object ExecuteInternal(object connection, Options options)
+	    internal override object ExecuteInternal(object connection, dynamic options)
         {
             return ExecuteInternal2(connection, options);
         }
@@ -54,26 +45,47 @@ namespace augen
 	    protected abstract void Close(TResponse response);
 	}
 
-    public abstract class Request
-    {
-        internal List<Test> Tests { get; private set; }
-        internal IReadOnlyDictionary<string, object> Options { get; private set; }
+	public static class RequestExtensions
+	{
+		public static TSelf Test<TParent, TSelf, TConnectio>(this Request<TParent, TSelf, TConnectio, bool> request,
+		                                                     string description) where TParent : Connection<TParent, TConnectio> where TSelf : Request<TParent, TSelf, TConnectio, bool>
+		{
+			request.Add(new Test(description, b => b));
+			return (TSelf) request;
+		}
+	}
 
-        protected Request(Connection connection, IEnumerable<Tuple<string, object>> options)
-        {
-            Options = options.ToDictionary(t => t.Item1, t => t.Item2);
-            Tests = new List<Test>();
+	public abstract class Request<TParent, TSelf, TConnection, TResponse> : Request<TResponse> where TSelf : Request<TParent, TSelf, TConnection, TResponse> where TParent : Connection<TParent, TConnection>
+	{
+		private readonly TParent _connection;
 
-            connection.Add(this);
-        }
+		protected Request(TParent connection, params Expression<Func<string, object>>[] options) : base(connection, options)
+		{
+			_connection = connection;
+		}
 
-        internal void Add(Test test)
-        {
-            Tests.Add(test);
-        }
+		protected abstract TResponse Execute(TConnection connection, dynamic options);
 
-        internal abstract object ExecuteInternal(object connection, Options options);
+		public TSelf Test(string description, Expression<Func<TResponse, object>> checker)
+		{
+			Add(new Test(description, Convert(checker)));
+			return (TSelf) this;
+		}
 
-	    internal abstract void CloseInternal(object response);
-    }
+		public TParent End()
+		{
+			return _connection;
+		}
+
+		private static Expression<Func<object, object>> Convert(Expression<Func<TResponse, object>> input)
+		{
+			var parameter = Expression.Parameter(typeof(object));
+			return Expression.Lambda<Func<object, object>>(Expression.Invoke(input, Expression.Convert(parameter, typeof(TResponse))), parameter);
+		}
+
+		internal override TResponse ExecuteInternal2(object connection, dynamic options)
+		{
+			return Execute((TConnection) connection, options);
+		}
+	}
 }
