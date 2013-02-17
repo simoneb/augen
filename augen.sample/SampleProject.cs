@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Net;
-using NUnit.Framework;
-using augen.nunit;
 
-namespace augen.console
+namespace augen.sample
 {
-	public class DemoProject : Project
+	public class SampleProject : Project
 	{
-		public DemoProject() : base("Demo project", new Servers
+		public SampleProject() : base("Demo project", new Servers
 		{
 			{ "173.194.67.102", role => "google", role => "http", port => 80, path => "/calendar" },
 			{ "google.com", role => "vip", role => "http", port => 80 },
@@ -53,11 +51,5 @@ namespace augen.console
 			yield return Truthy<HttpStatusCode>(c => (int) c >= 200 && (int) c < 300);
 			yield return Truthy<object>(_ => true);
 		}
-	}
-
-	[TestFixture]
-	public class DemoProjectNUnitFixture : NUnitFixture<DemoProject>
-	{
-		
 	}
 }

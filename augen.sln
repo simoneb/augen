@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "augen", "augen\augen.csproj", "{E056BDD0-7F7D-4AF7-841D-324608A47C88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "augen.console", "augen.console\augen.console.csproj", "{C1C39BDE-5C57-479E-A4EB-96133545C134}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{FCF9A848-D71D-4CC5-8D66-055351AB5A52}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -16,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "augen.nunit", "augen.nunit\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "augen.tests", "augen.tests\augen.tests.csproj", "{03F4E302-B7CB-4BFE-ACE9-1D5C1037F2F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "augen.sample", "augen.sample\augen.sample.csproj", "{C1C39BDE-5C57-479E-A4EB-96133545C134}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,10 +26,6 @@ Global
 		{E056BDD0-7F7D-4AF7-841D-324608A47C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E056BDD0-7F7D-4AF7-841D-324608A47C88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E056BDD0-7F7D-4AF7-841D-324608A47C88}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C1C39BDE-5C57-479E-A4EB-96133545C134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1C39BDE-5C57-479E-A4EB-96133545C134}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1C39BDE-5C57-479E-A4EB-96133545C134}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1C39BDE-5C57-479E-A4EB-96133545C134}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B31E0833-1857-4A8B-ADFA-4AF1235C853E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B31E0833-1857-4A8B-ADFA-4AF1235C853E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B31E0833-1857-4A8B-ADFA-4AF1235C853E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -38,6 +34,10 @@ Global
 		{03F4E302-B7CB-4BFE-ACE9-1D5C1037F2F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03F4E302-B7CB-4BFE-ACE9-1D5C1037F2F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03F4E302-B7CB-4BFE-ACE9-1D5C1037F2F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1C39BDE-5C57-479E-A4EB-96133545C134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1C39BDE-5C57-479E-A4EB-96133545C134}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1C39BDE-5C57-479E-A4EB-96133545C134}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1C39BDE-5C57-479E-A4EB-96133545C134}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

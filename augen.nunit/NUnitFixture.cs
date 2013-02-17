@@ -18,11 +18,11 @@ namespace augen.nunit
 		}
 
 		[Test, TestCaseSource("GetTests")]
-	    public void RunTest(Func<object> openConnection, Func<object, object> executeRequest,
-	                        Expression<Func<object, object>> checker, Action<object> closeResponse,
-	                        Action<object> closeConnection)
-	    {
-		    var connection = openConnection();
+	    public void AugenTests(Func<object> openConnection, Func<object, object> executeRequest,
+	                           Expression<Func<object, object>> checker, Action<object> closeResponse,
+	                           Action<object> closeConnection)
+		{
+			var connection = openConnection();
 		    var response = executeRequest(connection);
 
 		    var outcome = checker.Compile()(response);
@@ -74,7 +74,7 @@ namespace augen.nunit
 					foreach (var test in request.Tests)
 					{
 						var data = new TestCaseData(openConnection, executeRequest, test.Checker, closeResponse, closeConnection)
-							.SetName(string.Format("[{0}] - {1}", serverName, test.Description));
+							.SetName(string.Format("[{0}] {1}", serverName, test.Description));
 
 						if (ignore)
 							data.Ignore();
