@@ -31,9 +31,12 @@ namespace augen
 			return new Tcp.Tcp(this, port, connectThrows);
 		}
 
-		protected internal virtual IEnumerable<Truthy> Truthies { get { yield break; } } 
+	    protected internal virtual IEnumerable<Truthy> GetTruthies()
+	    {
+		    yield break;
+	    }
 
-		protected static Truthy Truthy<T>(Func<T, bool> condition)
+	    protected static Truthy Truthy<T>(Func<T, bool> condition)
 		{
 			return new Truthy(typeof(T), o => condition((T) o));
 		}

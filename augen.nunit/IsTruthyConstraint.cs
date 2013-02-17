@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework.Constraints;
 
 namespace augen.nunit
@@ -17,13 +16,7 @@ namespace augen.nunit
 		{
 			this.actual = actual;
 
-			if (actual is bool)
-				return (bool)actual;
-
-			if (_truthyValues.Any(t => t.Matches(actual)))
-				return true;
-
-			return false;
+			return Truthy.IsTruthy(actual, _truthyValues);
 		}
 
 		public override void WriteDescriptionTo(MessageWriter writer)

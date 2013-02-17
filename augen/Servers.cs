@@ -16,15 +16,15 @@ namespace augen
 			_servers.Add(new ServerSet(ParseName(name), options));
 		}
 
-		public void Add(Names names, params Expression<Func<string, object>>[] options)
+		public void Add(IEnumerable<string> names, params Expression<Func<string, object>>[] options)
 		{
 			_servers.Add(new ServerSet(names.SelectMany(ParseName).ToArray(), options));
 		}
 
 	    private static string[] ParseName(string name)
-		{
-			return new[] {name};
-		}
+	    {
+		    return TextRange.Parse(name);
+	    }
 
 		public IEnumerator<ServerSet> GetEnumerator()
 		{

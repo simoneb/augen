@@ -13,7 +13,7 @@ namespace augen.console
 			{ "google.com", role => "vip", role => "http", port => 80 },
 			"microsoft.com",
 			{"github.com", port => 26},
-			{new Names {"bwin.com", "bwin.it"}, role => "http", role => "bwin", subpath => "en/p/about-us/responsible-gaming"}
+			{new [] {"bwin.com", "bwin.it"}, role => "http", role => "bwin", subpath => "en/p/about-us/responsible-gaming"}
 		})
 		{
 			Http(123456)
@@ -26,6 +26,7 @@ namespace augen.console
 			Http(80)
 			.Roles("bwin")
 				.Get(o => "/" + o.subpath)
+					.Success("http success?")
 					.Test("status code with subpath", r => r.StatusCode)
 					.Test("content length with subpath", r => r.Content.Headers.ContentLength);
 
@@ -47,9 +48,10 @@ namespace augen.console
 					.Test("is tcp port open?", b => b ? "yes it is" : "no it isn't");
 		}
 
-		protected override IEnumerable<Truthy> Truthies
+		protected override IEnumerable<Truthy> GetTruthies()
 		{
-			get { yield return Truthy<HttpStatusCode>(c => (int) c >= 200 && (int) c < 300); }
+			yield return Truthy<HttpStatusCode>(c => (int) c >= 200 && (int) c < 300);
+			yield return Truthy<object>(_ => true);
 		}
 	}
 

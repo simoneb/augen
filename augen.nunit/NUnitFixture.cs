@@ -14,7 +14,7 @@ namespace augen.nunit
 		protected NUnitFixture()
 		{
 			_project = new TProject();
-			_isTruthy = new IsTruthyConstraint(_project.Truthies);
+			_isTruthy = new IsTruthyConstraint(_project.GetTruthies());
 		}
 
 		[Test, TestCaseSource("GetTests")]
@@ -27,11 +27,18 @@ namespace augen.nunit
 
 		    var outcome = checker.Compile()(response);
 
-		    Assert.That(outcome, _isTruthy);
-		    
-			closeResponse(response);
-		    closeConnection(connection);
+			try
+			{
+				Assert.That(outcome, _isTruthy);
+			}
+			finally
+			{
+				closeResponse(response);
+				closeConnection(connection);	
+			}
 		}
+
+		protected virtual FilterBehavior FilterBehavior { get { return FilterBehavior.Ignore; } }
 
 		public IEnumerable<ITestCaseData> GetTests()
 	    {
@@ -45,7 +52,10 @@ namespace augen.nunit
 				var connectionOptionsSingle = new OptionsSingleLookup(serverSet, connection);
 
 				if (!connection.IsSatisfiedByFilters(connectionOptionsMultiple))
-					ignore = true;
+					if (FilterBehavior == FilterBehavior.Hide)
+						continue;
+					else
+						ignore = true;
 
 				var localConnection = connection;
 				var localServerName = serverName;
@@ -64,7 +74,7 @@ namespace augen.nunit
 					foreach (var test in request.Tests)
 					{
 						var data = new TestCaseData(openConnection, executeRequest, test.Checker, closeResponse, closeConnection)
-							.SetName(serverName + " " + test.Description);
+							.SetName(string.Format("[{0}] - {1}", serverName, test.Description));
 
 						if (ignore)
 							data.Ignore();

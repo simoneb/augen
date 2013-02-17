@@ -57,6 +57,7 @@
     <Compile Include="Tcp\Tcp.cs" />
     <Compile Include="Tcp\TcpIsOpen.cs" />
     <Compile Include="Test.cs" />
+    <Compile Include="TextRange.cs" />
     <Compile Include="Truthy.cs" />
   </ItemGroup>
   <ItemGroup>

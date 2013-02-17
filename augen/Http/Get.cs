@@ -13,6 +13,11 @@ namespace augen.Http
 		{
 		}
 
+		public Get Success(string description)
+		{
+			return Test(description, r => r.IsSuccessStatusCode);
+		}
+
 		protected override HttpResponseMessage Execute(HttpClient connection, dynamic options)
 		{
 			return connection.GetAsync((string)options.path).Result;

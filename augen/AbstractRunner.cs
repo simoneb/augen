@@ -1,4 +1,6 @@
-﻿namespace augen
+﻿using System;
+
+namespace augen
 {
 	public abstract class AbstractRunner
 	{
@@ -10,12 +12,14 @@
 				ServerBegin(serverName);
 
 		        foreach (var connection in project.Connections)
-			    {
+		        {
 					var connectionOptionsMultiple = new OptionsMultipleLookup(serverSet, connection);
 					var connectionOptionsSingle = new OptionsSingleLookup(serverSet, connection);
 
 					if (!connection.IsSatisfiedByFilters(connectionOptionsMultiple))
 						continue;
+
+					ConnectionBegin(connection.GetType());
 
 					var connectionInstance = connection.OpenInternal(serverName, connectionOptionsSingle);
 
@@ -23,13 +27,22 @@
 				    {
 					    var options = new OptionsSingleLookup(serverSet, connection, request);
 
+					    RequestBegin(request.GetType());
+
 					    var response = request.ExecuteInternal(connectionInstance, options);
 
 					    foreach (var test in request.Tests)
-						    ReportTest(test.Description, test.Checker.Compile()(response));
+					    {
+						    var outcome = test.Checker.Compile()(response);
+						    ReportTest(test.Description, outcome, Truthy.IsTruthy(outcome, project.GetTruthies()));
+					    }
+
+					    RequestEnd(request.GetType());
 
 					    request.CloseInternal(response);
 				    }
+
+			        ConnectionEnd(connection.GetType());
 
 					connection.CloseInternal(connectionInstance);
 			    }
@@ -39,7 +52,25 @@
 		}
 
 		protected abstract void ServerBegin(string serverName);
-		protected abstract void ReportTest(string description, object outcome);
+
+		protected virtual void ConnectionBegin(Type connectionType)
+		{
+		}
+
+		protected virtual void RequestBegin(Type requestType)
+		{
+		}
+
+		protected abstract void ReportTest(string description, object outcome, bool success);
+
+		protected virtual void RequestEnd(Type requestType)
+		{
+		}
+
+		protected virtual void ConnectionEnd(Type connectionType)
+		{
+		}
+
 		protected abstract void ServerEnd(string serverName);
 	}
 }
