@@ -1,10 +1,15 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 
 namespace augen.Http
 {
 	public class Get : Request<Http, Get, HttpClient, HttpResponseMessage>
 	{
 		public Get(Http http, string path) : base(http, _path => path)
+		{
+		}
+
+		public Get(Http http, Func<object, string> path) : base(http, _path => path)
 		{
 		}
 

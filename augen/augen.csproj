@@ -43,6 +43,7 @@
     <Compile Include="FiltersHolder.cs" />
     <Compile Include="Http\Get.cs" />
     <Compile Include="Http\Http.cs" />
+    <Compile Include="Names.cs" />
     <Compile Include="OptionsMultipleLookup.cs" />
     <Compile Include="OptionsSingleLookup.cs" />
     <Compile Include="Connection.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Tcp\Tcp.cs" />
     <Compile Include="Tcp\TcpIsOpen.cs" />
     <Compile Include="Test.cs" />
+    <Compile Include="Truthy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

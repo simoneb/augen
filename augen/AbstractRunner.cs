@@ -38,10 +38,8 @@
 	        }
 		}
 
-		protected abstract void ServerEnd(string serverName);
-
 		protected abstract void ServerBegin(string serverName);
-
 		protected abstract void ReportTest(string description, object outcome);
+		protected abstract void ServerEnd(string serverName);
 	}
 }

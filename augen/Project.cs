@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace augen
 {
@@ -28,6 +29,13 @@ namespace augen
 		protected Tcp.Tcp Tcp(int port, bool connectThrows = false)
 		{
 			return new Tcp.Tcp(this, port, connectThrows);
+		}
+
+		protected internal virtual IEnumerable<Truthy> Truthies { get { yield break; } } 
+
+		protected static Truthy Truthy<T>(Func<T, bool> condition)
+		{
+			return new Truthy(typeof(T), o => condition((T) o));
 		}
     }
 }

@@ -18,6 +18,11 @@ namespace augen.Http
 			return new Get(this, path);
 		}
 
+		public Get Get(Func<dynamic, string> path)
+		{
+			return new Get(this, path);
+		}
+
 		protected override HttpClient Open(string serverName, dynamic options)
 		{
 			var client = new HttpClient {BaseAddress = new UriBuilder("http", serverName).Uri};

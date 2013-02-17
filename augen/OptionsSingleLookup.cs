@@ -26,7 +26,7 @@ namespace augen
 		{
 			var found = _holders.FirstOrDefault(l => l.Options.Contains(name));
 
-			result = found != null ? found.Options[name].LastOrDefault() : null;
+			result = found != null ? found.Options[name].Select(o => o(this)).LastOrDefault() : null;
 
 			return true;
 		}

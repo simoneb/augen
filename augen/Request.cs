@@ -8,7 +8,19 @@ namespace augen
 	{
 		internal List<Test> Tests { get; private set; }
 
-		protected Request(Connection connection, params Expression<Func<string, object>>[] options) : base(options)
+		internal Request(Connection connection, IEnumerable<Expression<Func<string, Func<object, object>>>> options) : base(options)
+		{
+			Tests = new List<Test>();
+			connection.Add(this);
+		}
+
+		internal Request(Connection connection, IEnumerable<Expression<Func<string, object>>> options) : base(options)
+		{
+			Tests = new List<Test>();
+			connection.Add(this);
+		}
+
+		protected Request(Connection connection) 
 		{
 			Tests = new List<Test>();
 			connection.Add(this);
@@ -26,11 +38,19 @@ namespace augen
 
 	public abstract class Request<TResponse> : Request
 	{
-	    protected Request(Connection connection, params Expression<Func<string, object>>[] options) : base(connection, options)
-	    {
-	    }
+		internal Request(Connection connection, IEnumerable<Expression<Func<string, Func<object, object>>>> options) : base(connection, options)
+		{
+		}
 
-	    internal abstract TResponse ExecuteInternal2(object connection, object options);
+		internal Request(Connection connection, IEnumerable<Expression<Func<string, object>>> options) : base(connection, options)
+		{
+		}
+
+		protected Request(Connection connection) : base(connection)
+		{
+		}
+
+		internal abstract TResponse ExecuteInternal2(object connection, object options);
 
 	    internal override object ExecuteInternal(object connection, dynamic options)
         {
@@ -49,7 +69,17 @@ namespace augen
 	{
 		private readonly TParent _connection;
 
+		protected Request(TParent connection) : base(connection)
+		{
+			_connection = connection;
+		}
+
 		protected Request(TParent connection, params Expression<Func<string, object>>[] options) : base(connection, options)
+		{
+			_connection = connection;
+		}
+
+		protected Request(TParent connection, params Expression<Func<string, Func<object, object>>>[] options) : base(connection, options)
 		{
 			_connection = connection;
 		}
