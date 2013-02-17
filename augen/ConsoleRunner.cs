@@ -12,6 +12,7 @@ namespace augen
 		protected override void ReportTest(string description, object outcome, bool success)
 		{
 			Console.ForegroundColor = success ? ConsoleColor.Green : ConsoleColor.Red;
+			Console.Write(" ");
 			Console.Write(success ? "OK" : "KO");
 			Console.ResetColor();
 
