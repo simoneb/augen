@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Linq;
 
 namespace augen.Http
 {
@@ -20,7 +21,7 @@ namespace augen.Http
 
 		protected override HttpResponseMessage Execute(HttpClient connection, dynamic options)
 		{
-			return connection.GetAsync((string)options.path).Result;
+			return connection.GetAsync((string) options.path).Result;
 		}
 
 		protected override void Close(HttpResponseMessage response)

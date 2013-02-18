@@ -40,7 +40,7 @@ namespace augen.sample
 				.Get("humans.txt")
 					.Test("humans!", r => r.StatusCode);
 
-			Tcp(80)
+			Tcp(890)
 				.IsOpen()
 					.Test("is tcp port open (short form)?")
 					.Test("is tcp port open?", b => b ? "yes it is" : "no it isn't");
@@ -49,6 +49,7 @@ namespace augen.sample
 		protected override IEnumerable<Truthy> GetTruthies()
 		{
 			yield return Truthy<HttpStatusCode>(c => (int) c >= 200 && (int) c < 300);
+			yield return Truthy<string>(_ => !_.Contains("no"));
 			yield return Truthy<object>(_ => true);
 		}
 	}

@@ -5,7 +5,10 @@ namespace augen.Tcp
 {
 	public class Tcp : Connection<Tcp, Socket>
 	{
-		public Tcp(Project project, int port, bool connectThrows) : base(project, _port => port, _connectThrows => connectThrows)
+		private const int ConnectionTimedOut = 10060;
+
+		public Tcp(Project project, int port, int connectTimeout, bool connectThrows)
+			: base(project, _port => port, _connectTimeout => connectTimeout, _connectThrows => connectThrows)
 		{
 		}
 
@@ -17,16 +20,22 @@ namespace augen.Tcp
 		protected override Socket Open(string serverName, dynamic options)
 		{
 			var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-			
-			try
-			{
-				socket.Connect(serverName, options.port);
-			}
-			catch
-			{
-				if (options.connectThrows)
-					throw;
-			}
+
+			var result = (IAsyncResult)socket.BeginConnect(serverName, options.port, null, null);
+			var success = result.AsyncWaitHandle.WaitOne(options.connectTimeout);
+
+			if(success)
+				try
+				{
+					socket.EndConnect(result);
+				}
+				catch
+				{
+					if (options.connectThrows)
+						throw;
+				}
+			else if(options.connectThrows)
+				throw new SocketException(ConnectionTimedOut);
 			
 			return socket;
 		}

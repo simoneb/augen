@@ -26,9 +26,9 @@ namespace augen
 			return new Http.Http(this, port);
 		}
 
-		protected Tcp.Tcp Tcp(int port, bool connectThrows = false)
+		protected Tcp.Tcp Tcp(int port, int connectTimeout = 1000, bool connectThrows = false)
 		{
-			return new Tcp.Tcp(this, port, connectThrows);
+			return new Tcp.Tcp(this, port, connectTimeout, connectThrows);
 		}
 
 	    protected internal virtual IEnumerable<Truthy> GetTruthies()

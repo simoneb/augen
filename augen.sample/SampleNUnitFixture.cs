@@ -6,6 +6,5 @@ namespace augen.sample
 	[TestFixture]
 	public class SampleNUnitFixture : NUnitFixture<SampleProject>
 	{
-		
 	}
 }

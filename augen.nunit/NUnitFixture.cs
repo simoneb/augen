@@ -52,10 +52,16 @@ namespace augen.nunit
 				var connectionOptionsSingle = new OptionsSingleLookup(serverSet, connection);
 
 				if (!connection.IsSatisfiedByFilters(connectionOptionsMultiple))
-					if (FilterBehavior == FilterBehavior.Hide)
-						continue;
-					else
-						ignore = true;
+					switch (FilterBehavior)
+					{
+						case FilterBehavior.Hide:
+							continue;
+						case FilterBehavior.Ignore:
+							ignore = true;
+							break;
+						default:
+							throw new InvalidOperationException(string.Format("FilterBehavior {0} not recognized", FilterBehavior));
+					}
 
 				var localConnection = connection;
 				var localServerName = serverName;

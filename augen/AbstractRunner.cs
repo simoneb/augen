@@ -21,15 +21,35 @@ namespace augen
 
 					ConnectionBegin(connection.GetType());
 
-					var connectionInstance = connection.OpenInternal(serverName, connectionOptionsSingle);
+			        object connectionInstance;
 
-				    foreach (var request in connection.Requests)
+			        try
+			        {
+				        connectionInstance = connection.OpenInternal(serverName, connectionOptionsSingle);
+			        }
+			        catch (Exception e)
+			        {
+				        ReportConnectionError(connection.GetType(), e);
+				        continue;
+			        }
+
+			        foreach (var request in connection.Requests)
 				    {
 					    var options = new OptionsSingleLookup(serverSet, connection, request);
 
 					    RequestBegin(request.GetType());
 
-					    var response = request.ExecuteInternal(connectionInstance, options);
+					    object response;
+
+					    try
+					    {
+						    response = request.ExecuteInternal(connectionInstance, options);
+					    }
+					    catch (Exception e)
+					    {
+						    ReportRequestError(request.GetType(), e);
+						    continue;
+					    }
 
 					    foreach (var test in request.Tests)
 					    {
@@ -50,6 +70,10 @@ namespace augen
 		        ServerEnd(serverName);
 	        }
 		}
+
+		protected abstract void ReportRequestError(Type requestType, Exception exception);
+
+		protected abstract void ReportConnectionError(Type connectionType, Exception exception);
 
 		protected abstract void ServerBegin(string serverName);
 

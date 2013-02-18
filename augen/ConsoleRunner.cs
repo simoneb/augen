@@ -4,6 +4,22 @@ namespace augen
 {
 	public class ConsoleRunner : AbstractRunner
 	{
+		protected override void ReportRequestError(Type requestType, Exception exception)
+		{
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.Write(" {0} request error ", requestType.Name);
+			Console.ResetColor();
+			Console.WriteLine(exception.Message);
+		}
+
+		protected override void ReportConnectionError(Type connectionType, Exception exception)
+		{
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.Write(" {0} connection error ", connectionType.Name);
+			Console.ResetColor();
+			Console.WriteLine(exception.Message);
+		}
+
 		protected override void ServerBegin(string serverName)
 		{
 			Console.WriteLine("[{0}]", serverName);
