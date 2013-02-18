@@ -22,9 +22,9 @@ namespace augen.Tcp
 			var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
 			var result = (IAsyncResult)socket.BeginConnect(serverName, options.port, null, null);
-			var success = result.AsyncWaitHandle.WaitOne(options.connectTimeout);
+			result.AsyncWaitHandle.WaitOne(options.connectTimeout);
 
-			if(success)
+			if(socket.Connected)
 				try
 				{
 					socket.EndConnect(result);
