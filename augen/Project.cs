@@ -21,7 +21,7 @@ namespace augen
             Connections.Add(connection);
         }
 
-		protected Http.Http Http(int port)
+		protected Http.Http Http(int port = 80)
 		{
 			return new Http.Http(this, port);
 		}

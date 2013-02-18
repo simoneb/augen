@@ -21,7 +21,7 @@ namespace augen.sample
 					.Test("content type", r => r.Content.Headers.ContentType)
 					.Test("read response size > 0?", r => r.Content.ReadAsStringAsync().Result.Length > 0);
 
-			Http(80)
+			Http()
 			.Roles("bwin")
 				.Get(o => "/" + o.subpath)
 					.Success("http success?")
