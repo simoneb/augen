@@ -29,7 +29,7 @@ namespace augen.Http
 
 		public Http Header(string name, Func<dynamic, string> value)
 		{
-			var optionName = "http_header:" + name;
+			var optionName = "[http_header] " + name;
 
 			_headers[name] = optionName;
 			AddOption(optionName, value);

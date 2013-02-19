@@ -4,19 +4,72 @@ namespace augen
 {
 	public class ConsoleRunner : AbstractRunner
 	{
-		protected override void ServerBegin(string serverName)
+		private readonly bool _printDiagnostics;
+		private readonly bool _printConnection;
+		private readonly bool _printRequest;
+		
+		/// <summary>
+		/// Creates a new <see cref="ConsoleRunner"/> with the provided options
+		/// </summary>
+		/// <param name="printDiagnostics">Whether to print the options for each of servers, connection and request</param>
+		/// <param name="printConnection">Whether to print connection details</param>
+		/// <param name="printRequest">Whether to print request details</param>
+		public ConsoleRunner(bool printDiagnostics = false, bool printConnection = false, bool printRequest = false)
 		{
-			Console.WriteLine("[{0}]", serverName);
+			_printDiagnostics = printDiagnostics;
+			_printConnection = printConnection;
+			_printRequest = printRequest;
 		}
 
-		protected override void ConnectionBegin(Type connectionType)
+		protected override void ServerBegin(string name, string serverOptions)
 		{
-			Console.WriteLine(" " + connectionType.Name);
+			Console.Write("[{0}]", name);
+
+			if (!_printDiagnostics)
+			{
+				Console.WriteLine();
+				return;
+			}
+			
+			Console.ForegroundColor = ConsoleColor.DarkGray;
+			Console.WriteLine(" " + serverOptions);
+			Console.ResetColor();
 		}
 
-		protected override void RequestBegin(Type requestType)
+		protected override void ConnectionBegin(Type connectionType, string connectionOptions)
 		{
-			Console.WriteLine("  " + requestType.Name);
+			if (!_printConnection)
+				return;
+
+			Console.Write(" " + connectionType.Name);
+
+			if (!_printDiagnostics)
+			{
+				Console.WriteLine();
+				return;
+			}
+			
+			Console.ForegroundColor = ConsoleColor.DarkGray;
+			Console.WriteLine(" " + connectionOptions);
+			Console.ResetColor();
+		}
+
+		protected override void RequestBegin(Type requestType, string requestOptions)
+		{
+			if (!_printRequest)
+				return;
+
+			Console.Write("  " + requestType.Name);
+
+			if (!_printDiagnostics)
+			{
+				Console.WriteLine();
+				return;
+			}
+			
+			Console.ForegroundColor = ConsoleColor.DarkGray;
+			Console.WriteLine(" " + requestOptions);
+			Console.ResetColor();
 		}
 
 		protected override void TestError(string description, Exception exception)
@@ -43,7 +96,7 @@ namespace augen
 			Console.WriteLine(exception.Message);
 		}
 
-		protected override void ReportTest(string description, object outcome, bool success)
+		protected override void TestComplete(string description, object outcome, bool success)
 		{
 			Console.ForegroundColor = success ? ConsoleColor.Green : ConsoleColor.Red;
 			Console.Write("   ");

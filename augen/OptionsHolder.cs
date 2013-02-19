@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 
 namespace augen
 {
@@ -39,6 +40,19 @@ namespace augen
 		{
 			var p = Expression.Parameter(typeof (string), optionName);
 			_options.Add(Expression.Lambda<Func<string, Func<object, object>>>(Expression.Constant(value), p));
+		}
+
+		public string DescribeOptions(dynamic options)
+		{
+			return _options.Any()
+				       ? Options.Aggregate(new StringBuilder("{"),
+				                           (sb, o) => sb.AppendFormat("{0}: {1}{2}{3}",
+				                                                      o.Key,
+				                                                      o.Count() > 1 ? "[" : "",
+				                                                      string.Join(", ", o.Select(op => op(options))),
+				                                                      o.Count() > 1 ? "]" : "").Append(", "),
+				                           sb => sb.ToString().TrimEnd(',', ' ') + '}')
+				       : string.Empty;
 		}
 	}
 }

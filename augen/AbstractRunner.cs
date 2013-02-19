@@ -9,7 +9,9 @@ namespace augen
             foreach (var serverSet in project.Servers)
 	        foreach (var serverName in serverSet.Names)
 	        {
-				ServerBegin(serverName);
+		        var serverOptions = serverSet.DescribeOptions(serverSet.Options);
+
+				ServerBegin(serverName, serverOptions);
 
 		        foreach (var connection in project.Connections)
 		        {
@@ -19,7 +21,7 @@ namespace augen
 					if (!connection.IsSatisfiedByFilters(connectionOptionsMultiple))
 						continue;
 
-					ConnectionBegin(connection.GetType());
+					ConnectionBegin(connection.GetType(), connection.DescribeOptions(connectionOptionsSingle));
 
 			        object connectionInstance;
 
@@ -37,7 +39,7 @@ namespace augen
 				    {
 					    var options = new OptionsSingleLookup(serverSet, connection, request);
 
-					    RequestBegin(request.GetType());
+					    RequestBegin(request.GetType(), request.DescribeOptions(options));
 
 					    object response;
 
@@ -56,7 +58,7 @@ namespace augen
 						    try
 						    {
 							    var outcome = test.Checker.Compile()(response);
-							    ReportTest(test.Description, outcome, Truthy.IsTruthy(outcome, project.GetTruthies()));
+							    TestComplete(test.Description, outcome, Truthy.IsTruthy(outcome, project.GetTruthies()));
 						    }
 						    catch (Exception e)
 						    {
@@ -84,17 +86,17 @@ namespace augen
 
 		protected abstract void ConnectionError(Type connectionType, Exception exception);
 
-		protected abstract void ServerBegin(string serverName);
+		protected abstract void ServerBegin(string name, string serverOptions);
 
-		protected virtual void ConnectionBegin(Type connectionType)
+		protected virtual void ConnectionBegin(Type connectionType, string connectionOptions)
 		{
 		}
 
-		protected virtual void RequestBegin(Type requestType)
+		protected virtual void RequestBegin(Type requestType, string requestOptions)
 		{
 		}
 
-		protected abstract void ReportTest(string description, object outcome, bool success);
+		protected abstract void TestComplete(string description, object outcome, bool success);
 
 		protected virtual void RequestEnd(Type requestType)
 		{
