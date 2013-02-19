@@ -29,7 +29,7 @@ namespace augen
 			        }
 			        catch (Exception e)
 			        {
-				        ReportConnectionError(connection.GetType(), e);
+				        ConnectionError(connection.GetType(), e);
 				        continue;
 			        }
 
@@ -47,14 +47,21 @@ namespace augen
 					    }
 					    catch (Exception e)
 					    {
-						    ReportRequestError(request.GetType(), e);
+						    RequestError(request.GetType(), e);
 						    continue;
 					    }
 
 					    foreach (var test in request.Tests)
 					    {
-						    var outcome = test.Checker.Compile()(response);
-						    ReportTest(test.Description, outcome, Truthy.IsTruthy(outcome, project.GetTruthies()));
+						    try
+						    {
+							    var outcome = test.Checker.Compile()(response);
+							    ReportTest(test.Description, outcome, Truthy.IsTruthy(outcome, project.GetTruthies()));
+						    }
+						    catch (Exception e)
+						    {
+							    TestError(test.Description, e);
+						    }
 					    }
 
 					    RequestEnd(request.GetType());
@@ -71,9 +78,11 @@ namespace augen
 	        }
 		}
 
-		protected abstract void ReportRequestError(Type requestType, Exception exception);
+		protected abstract void TestError(string description, Exception exception);
 
-		protected abstract void ReportConnectionError(Type connectionType, Exception exception);
+		protected abstract void RequestError(Type requestType, Exception exception);
+
+		protected abstract void ConnectionError(Type connectionType, Exception exception);
 
 		protected abstract void ServerBegin(string serverName);
 

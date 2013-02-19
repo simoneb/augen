@@ -7,20 +7,20 @@ namespace augen
 {
 	public abstract class OptionsHolder
 	{
-		internal ILookup<string, Func<object, object>> Options { get; private set; }
+		private readonly List<Expression<Func<string, Func<object, object>>>> _options = new List<Expression<Func<string, Func<object, object>>>>();
+		internal ILookup<string, Func<object, object>> Options { get { return _options.Select(ParseOption).ToLookup(_ => _.Item1, _ => _.Item2); } }
 
 		protected OptionsHolder()
 		{
-			Options = Enumerable.Empty<Tuple<string, Func<object, object>>>().ToLookup(o => o.Item1, o => o.Item2);
 		}
 
 		protected OptionsHolder(IEnumerable<Expression<Func<string, object>>> options) : this(ConvertOptions(options))
 		{
 		}
 
-		protected OptionsHolder(IEnumerable<Expression<Func<string, Func<object, object>>>> dynamicOptions)
+		protected OptionsHolder(IEnumerable<Expression<Func<string, Func<object, object>>>> options)
 		{
-			Options = dynamicOptions.Select(ParseOption).ToLookup(_ => _.Item1, _ => _.Item2);
+			_options = options.ToList();
 		}
 
 		private static IEnumerable<Expression<Func<string, Func<object, object>>>> ConvertOptions(IEnumerable<Expression<Func<string, object>>> options)
@@ -33,6 +33,12 @@ namespace augen
 		internal static Tuple<string, T> ParseOption<T>(Expression<Func<string, T>> expr)
 		{
 			return Tuple.Create(expr.Parameters.Single().Name.TrimStart('_'), expr.Compile()(null));
+		}
+
+		protected void AddOption(string optionName, Func<object, object> value)
+		{
+			var p = Expression.Parameter(typeof (string), optionName);
+			_options.Add(Expression.Lambda<Func<string, Func<object, object>>>(Expression.Constant(value), p));
 		}
 	}
 }

@@ -23,7 +23,12 @@ namespace augen
 
 		protected Http.Http Http(int port = 80)
 		{
-			return new Http.Http(this, port);
+			return new Http.Http(this, "http", port);
+		}
+
+		protected Http.Http Https(int port = 443)
+		{
+			return new Http.Http(this, "https", port);
 		}
 
 		protected Tcp.Tcp Tcp(int port, int connectTimeout = 1000, bool connectThrows = false)

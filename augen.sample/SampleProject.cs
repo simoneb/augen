@@ -7,7 +7,7 @@ namespace augen.sample
 	{
 		public SampleProject() : base("Demo project", new Servers
 		{
-			{ "173.194.67.102", role => "google", role => "http", port => 80, path => "/calendar" },
+			{ "173.194.67.102", role => "google", role => "http", port => 80, path => "/calendar", host => "google.it" },
 			{ "google.com", role => "vip", role => "http", port => 80 },
 			"microsoft.com",
 			{"github.com", port => 26},
@@ -21,6 +21,12 @@ namespace augen.sample
 					.Test("content type", r => r.Content.Headers.ContentType)
 					.Test("read response size > 0?", r => r.Content.ReadAsStringAsync().Result.Length > 0);
 
+			Http(123456)
+			.Roles("google")
+			.Header("host", o => o.host)
+				.Get("/")
+					.Success("is success?");
+
 			Http()
 			.Roles("bwin")
 				.Get(o => "/" + o.subpath)
@@ -30,7 +36,7 @@ namespace augen.sample
 
 			Http(80)
 			.Roles("http")
-			.Header("Accept-Encoding", "compress", "gzip")
+			.Header("Accept-Encoding", "gzip")
 				.Get("/")
 					.Test("status code", r => r.StatusCode)
 					.Test("content length", r => r.Content.Headers.ContentLength)
